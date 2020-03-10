@@ -5,17 +5,19 @@ function LinkedList() {
     this.size = 0;
 }
 
-LinkedList.prototype.addElmAtstart = function (value) {
+LinkedList.prototype.addElmAtStart = function (value) {
     let tempNode = new LinkedNode(value);
 
     tempNode.next = this.root;
     this.root = tempNode;
     this.size += 1;
+
+    return tempNode;
 }
 
 LinkedList.prototype.init = function (array) {
     for (let i= 0; i < array.length; i++) {
-        this.addElmAtstart(array[i]);
+        this.addElmAtStart(array[i]);
     }
 }
 
@@ -41,10 +43,11 @@ LinkedList.prototype.toString = function () {
     }
 
     string += ']';
+    
     return string;
 }
 
-LinkedList.prototype.clearFirst = function() {
+LinkedList.prototype.deleteFirst = function() {
     let tempNode = this.root.next;
     const firstElm = this.root.value;
     this.root = tempNode;
@@ -52,19 +55,55 @@ LinkedList.prototype.clearFirst = function() {
     return firstElm;
 }
 
-LinkedList.prototype.clearEnd = function() {
-    let tempNode = new LinkedNode();
-    let nextTN = tempNode.next;
+LinkedList.prototype.clearAll = function() {
+    this.root = null;
+    this.size = 0;
 
-    while(tempNode) {
-        nextTN = null;
-        tempNode = tempNode.next
-    }
 }
 
-// const test = new LinkedList();
-// test.init([9, 8, 5]);
-// let b = test.clearEnd();
-// let c = test.toArray();
-// console.log(b);
-// console.log(c);
+LinkedList.prototype.addElmEnd = function(value) {
+    let tempNode = new LinkedNode(value);
+    let currentNode = this.root;
+    
+    while (currentNode.next) {
+    currentNode = currentNode.next;
+    }
+    currentNode.next = tempNode;
+    this.size += 1;
+}
+
+LinkedList.prototype.removeEndElm = function () { 
+    let currentNode = this.root;
+    let removeNode = this.root.next;
+
+   if (!currentNode) return null;
+   if (!currentNode.next) {
+       currentNode = null;
+       return currentNode;
+   }
+   if (!removeNode) {
+       currentNode = this.root.next;
+   }
+
+   while(removeNode.next !== null) {
+       currentNode = removeNode;
+       removeNode = removeNode.next;
+   }
+   currentNode.next = removeNode.next;
+   this.size -= 1;
+
+   return removeNode.next;
+}
+
+LinkedList.prototype.getListSize = function() {
+    return this.size;
+}
+
+
+let test = new LinkedList();
+test.init([]); 
+let b = test.addElmAtStart(4);
+let c = test.getListSize();
+console.log(b);
+console.log(c);
+
